@@ -82,7 +82,26 @@ class SiteController extends Controller {
 				$this->redirect(Yii::app()->user->returnUrl);
 			}
 		}
-		$this->render('login', ['model' => $model]);
+
+		Feed::$userAgent = Yii::app()->params['curlUserAgent'];
+		Feed::$cacheDir = Yii::app()->params['feedCacheDir'];
+		Feed::$cacheExpire = Yii::app()->params['feedCacheExp'];
+		$feed = Feed::loadRss(Yii::app()->params['latestUpdatesFeedUrl']);
+		if (!empty($feed)) {
+			$update_item = $feed->item;
+			$more = ' <a href="' . $update_item->link . '" target="_blank">Read more</a>';
+			$update_item->description = trim(str_replace(' [&#8230;]', '...' . $more, $update_item->description));
+			$update_item->description = preg_replace('/The post.*appeared first on .*\./', '', $update_item->description);
+		}
+
+		$feed = Feed::loadRss(Yii::app()->params['blogFeedUrl']);
+		if (!empty($feed)) {
+			$blog_item = $feed->item;
+			$more = ' <a href="' . $blog_item->link . '" target="_blank">Read more</a>';
+			$blog_item->description = trim(str_replace(' [&#8230;]', '...' . $more, $blog_item->description));
+			$blog_item->description = preg_replace('/The post.*appeared first on .*\./', '', $blog_item->description);
+		}
+		$this->render('login', ['model' => $model, 'update_item' => $update_item, 'blog_item' => $blog_item]);
 	}
 
 	/**

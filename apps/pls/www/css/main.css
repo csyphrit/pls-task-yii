@@ -100,6 +100,10 @@ div.breadcrumbs a {
     margin-bottom: .2em;
 }
 
+.swiper-slide .content a {
+    color: #4a9dca;
+}
+
 .swiper-slide .content a.btn-primary {
     font-size: 0.9em;
     line-height: 1.3em;

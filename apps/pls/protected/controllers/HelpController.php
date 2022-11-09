@@ -104,8 +104,8 @@ class HelpController extends Controller {
 	 */
 	public function actionUpdates() {
 		Feed::$userAgent = Yii::app()->params['curlUserAgent'];
-		Feed::$cacheDir = Yii::app()->params['latestUpdatesFeedCacheDir'];
-		Feed::$cacheExpire = Yii::app()->params['latestUpdatesFeedCacheExp'];
+		Feed::$cacheDir = Yii::app()->params['feedCacheDir'];
+		Feed::$cacheExpire = Yii::app()->params['feedCacheExp'];
 		$feed = Feed::loadRss(Yii::app()->params['latestUpdatesFeedUrl']);
 		$items = [];
 		if (!empty($feed)) {
